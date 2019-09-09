@@ -223,8 +223,12 @@ void Interpreter::Impl::file_job(const StatementContainer& stms) {
     printer.output.close();
 }
 
+Interpreter::~Interpreter() = default;
+Interpreter::Interpreter(Interpreter&&) = default;
+Interpreter& Interpreter::operator= (Interpreter&&) = default;
+    
 Interpreter::Interpreter(Context context, std::string name)
-    : priv_(std::make_shared<Impl>(
+    : priv_(std::make_unique<Impl>(
         std::move(name),
         std::move(context.logger),
         context.block_size,

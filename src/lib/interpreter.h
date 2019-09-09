@@ -23,7 +23,11 @@ public:
 
 public:
     Interpreter(Context context, std::string name);
+    ~Interpreter();
 
+    Interpreter(Interpreter&&);
+    Interpreter& operator= (Interpreter&&);
+    
     Interpreter(const Interpreter&) = delete;
     Interpreter& operator= (const Interpreter&) = delete;
 
@@ -31,7 +35,7 @@ public:
     void stop_and_log_metrics() const;
 
 private:
-    std::shared_ptr<Impl> priv_;
+    std::unique_ptr<Impl> priv_;
 };
 using InterpreterPtr = std::shared_ptr<Interpreter>;
 
