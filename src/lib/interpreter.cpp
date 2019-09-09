@@ -1,5 +1,6 @@
 #include "interpreter.h"
 
+#include <array>
 #include <string>
 #include <vector>
 #include <list>
