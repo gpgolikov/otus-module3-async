@@ -1,0 +1,27 @@
+dist: xenial
+language: cpp
+compiler: clang
+addons:
+  apt:
+    sources:
+    - llvm-toolchain-xenial-7
+    packages:
+    - libc++-7-dev
+    - libc++abi-7-dev
+    update: true
+install:
+- pip install --user conan
+- conan user
+- conan profile new --detect default
+script:
+- conan profile update settings.compiler.libcxx=libc++ default
+- CXXFLAGS="-stdlib=libc++" cmake -DCMAKE_BUILD_TYPE=Release .
+- cmake --build .
+- cmake --build . --target test
+- cmake --build . --target package
+deploy:
+  provider: script
+  skip_cleanup: true
+  script:
+  - curl -f -T async-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb -ugpgolikov:$BINTRAY_API_KEY "https://api.bintray.com/content/gpgolikov/otus-cpp/homework/$TRAVIS_BUILD_NUMBER/async-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb;deb_distribution=xenial;deb_component=main;deb_architecture=amd64;publish=1"
+
